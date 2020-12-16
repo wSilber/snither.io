@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Snither.io - Best Snake Game Ever</title>
+    <!-- Phaser Scripts -->
+    <script src="phaser/phaser.min.js"></script>
+
+    <!-- Socket Script -->
+    <script src="/socket.io/socket.io.js"></script>
+
+     <!-- Bootstrap and Jquery UI stylesheets -->
+     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+
+    <!-- Bootstrap Javascript Scripts -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+
+    <!-- Game Script -->
+    <script src="js/game.js"></script>
+
+    <!-- Load Scenes -->
+    <script src="scenes/titleScene.js"></script>
+    <script src="scenes/gameScene.js"></script>
+
+    <!-- Load Objects -->
+    <script src="js/snake.js"></script>
+    <script src="js/food.js"></script>
+    <script src="js/util.js"></script>
+
+    <!-- Custom Css -->
+    <link rel="stylesheet" href="css/main.css">
+
+    <script>
+        //Start socket
+        var socket = io();
+    </script>
+</head>
+<body>
+
+    <!-- Play/login modal -->
+    <div class="modal no-scroll" id="login-modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title w-100 centered">Snither.io</h3>
+                </div>
+                <div class="modal-body">
+                <div class="alert alert-danger" id="title-error" role="alert"></div>
+                <div class="login-div">
+                    <h5 class="centered">Play Now</h5>
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" placeholder="username" id="play-now-username">
+                    </div>
+                    <div class="mb-5">
+                        <button type="button" class="form-control btn btn-block btn-success start-game">Play</button>
+                    </div>
+                    <h5 class="centered">Login</h5>
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" placeholder="username" id="username-input-login">
+                        <input type="password" class="form-control" placeholder="password" id="password-input-login">
+                    </div>
+                    <button type="button" class="form-control btn btn-block btn-success" id="login-btn">Login</button>
+                </div>
+                <div class="register-div">
+                    <h5 class="centered">Register</h5>
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" placeholder="username" id="username-input-register">
+                        <input type="password" class="form-control" placeholder="password" id="password-input-register">
+                    </div>
+                    <button type="button" id="register-btn" class="form-control btn btn-block btn-success">Register</button>
+                </div>
+            </div>
+            <div class="login-div">
+                <div class="modal-footer centered" style="display:block">
+                    <p class="centered">Dont have an account? <a id="change-to-register" href="#">Click here</a> to create an account</p>
+                </div>
+            </div>
+            <div class="register-div">
+                <div class="modal-footer centered" style="display:block">
+                    <p class="centered">Already have an account? <a id="change-to-login" href="#">Click here</a> to login</p>
+                </div>
+            </div>
+            <div id="highest-score-scoreboard">
+                <h3 class="centered">Highest Scores Of All Time</h3>
+
+                <!-- Scoreboard -->
+                <ol class="centered" style="margin: 0 100px" id="highest-scores-container">
+
+                </ol>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <!-- Logged in modal -->
+    <div class="modal no-scroll" id="logged-in-modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title w-100 centered">Snither.io</h3>
+                </div>
+                <div class="modal-body">
+                    <h3 id="logged-in-name" class="centered w-100">Welcome User</h3>
+                    <!-- Color selection -->
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="color-select" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          Choose a color
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                          <button class="dropdown-item" type="button" id="color-red">Red</button>
+                          <button class="dropdown-item" type="button" id="color-blue">Blue</button>
+                          <button class="dropdown-item" type="button" id="color-green">Green</button>
+                          <button class="dropdown-item" type="button" id="color-purple">Purple</button>
+                        </div>
+                        <button class="btn btn-light">Current color:<a id="color-selected"> None</a></button>
+                      </div>
+                    <br> 
+                    <button type="button" class="form-control btn btn-block btn-success start-game">Play</button>
+                    <button type="button" id="logout-btn" class="form-control btn btn-block btn-success">Logout</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- End modal -->
+    <div class="modal no-scroll" id="end-modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title w-100 centered">Snither.io</h3>
+                </div>
+                <div class="modal-body">
+                    <h3 id="end-score" class="centered w-100">Welcome User</h3>
+                    <button type="button" class="form-control btn btn-block btn-success start-game">Play</button>
+                    <button type="button" id="back-btn" class="form-control btn btn-block btn-success">Go Back</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Load audio -->
+    <audio id="start_audio" src="assets/start_audio.wav"></audio>
+    <audio id="button_audio" src="assets/button_click.wav"></audio>
+
+    <!-- Custom Javascript -->
+    <script src="js/main.js"></script>
+</body>
+</html>

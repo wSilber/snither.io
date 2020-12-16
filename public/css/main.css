@@ -1,0 +1,19 @@
+.centered {
+    text-align: center !important;
+}
+
+body {
+    overflow: hidden;
+    background-image: url("/assets/tile.png");
+    background-repeat: repeat;
+}
+
+.no-scroll::-webkit-scrollbar {
+    display: none;
+}
+  
+.no-scroll {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    background-color: transparent;
+}

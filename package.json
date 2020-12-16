@@ -1,0 +1,18 @@
+{
+  "name": "snither.io",
+  "version": "1.0.0",
+  "description": "snither.io files",
+  "main": "index.js",
+  "scripts": {
+    "test": "node index.js"
+  },
+  "author": "473590, 474204",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.0.0",
+    "express": "^4.17.1",
+    "mongodb": "^3.6.3",
+    "phaser": "^3.24.1",
+    "socket.io": "^3.0.3"
+  }
+}
