@@ -3,6 +3,8 @@ Remake spinnoff of the popular game Slither.io
 
 ![gameplay image](README-images/image1.png)
 
+![gameplay image](README-images/image2.png)
+
 # Installation
 
 1. Clone git repository into your favorite code editor
