@@ -4,7 +4,7 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var bcrypt = require('bcrypt'); 
 var MongoClient = require('mongodb').MongoClient;
-var url = "mongodb+srv://wSilber:William321@test.0emdt.mongodb.net/";
+var url = "mongodb+srv://<Username>:<Password>@test.0emdt.mongodb.net/";
 const saltRounds = 10;  
 
 //Route all requests to the public folder
